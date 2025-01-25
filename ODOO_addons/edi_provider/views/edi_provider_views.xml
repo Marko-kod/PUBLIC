@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+   <!-- Glavni meni -->
+    <menuitem id="edi_provider_menu_root" name="EDI Management" sequence="5" groups="base.group_user"/>
     <!-- Definicija akcije (MORA BITI PRVA) -->
     <record id="edi_provider_action" model="ir.actions.act_window">
         <field name="name">EDI Providers</field>
@@ -13,8 +15,7 @@
         <field name="description">EDI Management Category</field>
     </record>
 
-    <!-- Glavni meni -->
-    <menuitem id="edi_provider_menu_root" name="EDI Management" sequence="5" groups="base.group_user"/>
+ 
 
     <!-- Set EDI Providers first (sequence 1) -->
     <menuitem id="edi_provider_menu" name="EDI Providers"

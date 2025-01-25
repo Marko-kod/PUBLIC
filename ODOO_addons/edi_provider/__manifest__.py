@@ -8,8 +8,8 @@
     'depends': ['base', 'website'],  # Ensure 'website' is included if you're using website features
     'data': [
         'security/ir.model.access.csv',
-        'views/edi_format_views.xml',
         'views/edi_provider_views.xml',
+        'views/edi_format_views.xml',        
         'views/edi_dictionary_menu.xml',
         'views/edi_dictionary_template.xml',
     ],
