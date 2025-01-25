@@ -12,9 +12,9 @@
         <field name="name">EDI Management</field>
         <field name="description">EDI Management Category</field>
     </record>
-    <!-- Meni za EDI formate (spojen na EDI Management) -->
+<!-- In edi_provider_views.xml -->
 <menuitem id="edi_format_menu" name="EDI Formats"
-          parent="edi_provider_menu_root" action="edi_format_action"/>
+          parent="edi_provider_menu_root" action="edi_format_action" sequence="2"/>
 
 
     <!-- Prikaz forme -->
