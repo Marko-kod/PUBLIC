@@ -1,6 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Form View for EDI Provider -->
-    <record id="edi_provider_form" model="ir.ui.view">
+    <!-- Definicija akcije (MORA BITI PRVA) -->
+    <record id="edi_provider_action" model="ir.actions.act_window">
+        <field name="name">EDI Providers</field>
+        <field name="res_model">edi.provider</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Kategorija aplikacije za bolju vidljivost u glavnom meniju -->
+    <record id="edi_provider_category" model="ir.module.category">
+        <field name="name">EDI Management</field>
+        <field name="description">EDI Management Category</field>
+    </record>
+
+    <!-- Glavni meni -->
+    <menuitem id="edi_provider_menu_root" name="EDI Management" sequence="5" groups="base.group_user"/>
+
+    <!-- Set EDI Providers first (sequence 1) -->
+    <menuitem id="edi_provider_menu" name="EDI Providers"
+              parent="edi_provider_menu_root" action="edi_provider_action"
+              sequence="1"/>
+
+    <!-- Set EDI Formats second (sequence 2) -->
+    <menuitem id="edi_format_menu" name="EDI Formats"
+              parent="edi_provider_menu_root" action="edi_format_action"
+              sequence="2"/>
+
+    <!-- Set EDI Dictionary third (sequence 3) -->
+    <menuitem id="edi_dictionary_menu" name="EDI Dictionary"
+              parent="edi_provider_menu_root" action="edi_dictionary_action"
+              sequence="3"/>
+              
+
+    <!-- Prikaz forme -->
+<record id="edi_provider_form" model="ir.ui.view">
         <field name="name">edi.provider.form</field>
         <field name="model">edi.provider</field>
         <field name="arch" type="xml">
@@ -61,6 +94,20 @@
 
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <!-- Prikaz liste -->
+    <record id="edi_provider_tree" model="ir.ui.view">
+        <field name="name">edi.provider.tree</field>
+        <field name="model">edi.provider</field>
+        <field name="arch" type="xml">
+            <tree string="EDI Providers">
+                <field name="name"/>
+                <field name="communication_method"/>
+                <field name="auth_type"/>
+                <field name="api_url"/>
+            </tree>
         </field>
     </record>
 </odoo>
