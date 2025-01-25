@@ -16,9 +16,20 @@
     <!-- Glavni meni -->
     <menuitem id="edi_provider_menu_root" name="EDI Management" sequence="5" groups="base.group_user"/>
 
-    <!-- Podmeni za EDI providere -->
+    <!-- Set EDI Providers first (sequence 1) -->
     <menuitem id="edi_provider_menu" name="EDI Providers"
-              parent="edi_provider_menu_root" action="edi_provider_action" groups="base.group_user"/>
+              parent="edi_provider_menu_root" action="edi_provider_action"
+              sequence="1"/>
+
+    <!-- Set EDI Formats second (sequence 2) -->
+    <menuitem id="edi_format_menu" name="EDI Formats"
+              parent="edi_provider_menu_root" action="edi_format_action"
+              sequence="2"/>
+
+    <!-- Set EDI Dictionary third (sequence 3) -->
+    <menuitem id="edi_dictionary_menu" name="EDI Dictionary"
+              parent="edi_provider_menu_root" action="edi_dictionary_action"
+              sequence="3"/>
               
 
     <!-- Prikaz forme -->
