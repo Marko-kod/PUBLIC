@@ -33,7 +33,7 @@
               
 
     <!-- Prikaz forme -->
-<record id="edi_provider_form" model="ir.ui.view">
+ <record id="edi_provider_form" model="ir.ui.view">
         <field name="name">edi.provider.form</field>
         <field name="model">edi.provider</field>
         <field name="arch" type="xml">
@@ -49,10 +49,11 @@
                         <field name="notes"/>
                     </group>
 
-                    <!-- NEW SECTION: EDI Connection with TABS -->
+                    <!-- ✅ EDI CONNECTION SECTION -->
                     <notebook string="EDI Connection">
                         <page string="SOAP WS">
                             <group>
+                                <field name="active_soap_ws"/>
                                 <field name="soap_ws_url"/>
                                 <field name="soap_ws_username"/>
                                 <field name="soap_ws_password" password="True"/>
@@ -60,6 +61,7 @@
                         </page>
                         <page string="AS2">
                             <group>
+                                <field name="active_as2"/>
                                 <field name="as2_partner_url"/>
                                 <field name="as2_certificate"/>
                                 <field name="as2_encryption_method"/>
@@ -67,6 +69,7 @@
                         </page>
                         <page string="AS4">
                             <group>
+                                <field name="active_as4"/>
                                 <field name="as4_partner_url"/>
                                 <field name="as4_certificate"/>
                                 <field name="as4_encryption_method"/>
@@ -74,6 +77,7 @@
                         </page>
                         <page string="SFTP">
                             <group>
+                                <field name="active_sftp"/>
                                 <field name="sftp_host"/>
                                 <field name="sftp_port"/>
                                 <field name="sftp_username"/>
@@ -83,6 +87,7 @@
                         </page>
                         <page string="FTP">
                             <group>
+                                <field name="active_ftp"/>
                                 <field name="ftp_host"/>
                                 <field name="ftp_port"/>
                                 <field name="ftp_username"/>

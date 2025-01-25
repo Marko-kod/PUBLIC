@@ -22,39 +22,38 @@ class EDIProvider(models.Model):
     api_url = fields.Char(string="API URL")
     notes = fields.Text(string="Notes")
 
-    # SOAP WS
-    soap_ws_url = fields.Char(string="SOAP WS URL")
-    soap_ws_username = fields.Char(string="SOAP Username")
-    soap_ws_password = fields.Char(string="SOAP Password")
+    # ✅ Active Connection Checkboxes
+    active_soap_ws = fields.Boolean(string="Active SOAP WS")
+    active_as2 = fields.Boolean(string="Active AS2")
+    active_as4 = fields.Boolean(string="Active AS4")
+    active_sftp = fields.Boolean(string="Active SFTP")
+    active_ftp = fields.Boolean(string="Active FTP")
 
-    # AS2
+    # SOAP WS Fields
+    soap_ws_url = fields.Char(string="SOAP WS URL")
+    soap_ws_username = fields.Char(string="SOAP WS Username")
+    soap_ws_password = fields.Char(string="SOAP WS Password")
+
+    # AS2 Fields
     as2_partner_url = fields.Char(string="AS2 Partner URL")
     as2_certificate = fields.Binary(string="AS2 Certificate")
-    as2_encryption_method = fields.Selection([
-        ('none', 'None'),
-        ('3des', '3DES'),
-        ('aes', 'AES'),
-    ], string="AS2 Encryption Method")
+    as2_encryption_method = fields.Char(string="AS2 Encryption Method")
 
-    # AS4
+    # AS4 Fields
     as4_partner_url = fields.Char(string="AS4 Partner URL")
     as4_certificate = fields.Binary(string="AS4 Certificate")
-    as4_encryption_method = fields.Selection([
-        ('none', 'None'),
-        ('3des', '3DES'),
-        ('aes', 'AES'),
-    ], string="AS4 Encryption Method")
+    as4_encryption_method = fields.Char(string="AS4 Encryption Method")
 
-    # SFTP
+    # SFTP Fields
     sftp_host = fields.Char(string="SFTP Host")
-    sftp_port = fields.Integer(string="SFTP Port", default=22)
+    sftp_port = fields.Integer(string="SFTP Port")
     sftp_username = fields.Char(string="SFTP Username")
     sftp_password = fields.Char(string="SFTP Password")
     sftp_remote_path = fields.Char(string="SFTP Remote Path")
 
-    # FTP
+    # FTP Fields
     ftp_host = fields.Char(string="FTP Host")
-    ftp_port = fields.Integer(string="FTP Port", default=21)
+    ftp_port = fields.Integer(string="FTP Port")
     ftp_username = fields.Char(string="FTP Username")
     ftp_password = fields.Char(string="FTP Password")
     ftp_remote_path = fields.Char(string="FTP Remote Path")
