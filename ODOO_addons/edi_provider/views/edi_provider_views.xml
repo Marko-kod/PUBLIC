@@ -21,11 +21,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <record id="edi_dictionary_action" model="ir.actions.act_window">
-        <field name="name">EDI Dictionary</field>
-        <field name="res_model">edi.dictionary</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+
 
     <!-- 4. Meni stavke -->
     <menuitem id="edi_provider_menu" name="EDI Providers"
@@ -36,9 +32,6 @@
               parent="edi_provider_menu_root" action="edi_format_action"
               sequence="2"/>
 
-    <menuitem id="edi_dictionary_menu" name="EDI Dictionary"
-              parent="edi_provider_menu_root" action="edi_dictionary_action"
-              sequence="3"/>
 
     <!-- 5. Prikaz forme -->
     <record id="edi_provider_form" model="ir.ui.view">
