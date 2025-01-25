@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Add menu item for EDI Dictionary -->
-    <menuitem id="edi_dictionary_menu"
-              name="EDI Dictionary"
-              parent="edi_provider_menu_root"
-              action="edi_dictionary_action"/>
+    <!-- Akcija koja otvara HTML stranicu -->
+    <record id="edi_dictionary_action" model="ir.actions.act_url">
+        <field name="name">EDI Dictionary</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="url">/edi/dictionary</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Dodaj u EDI Management glavni meni -->
+    <menuitem id="edi_dictionary_menu" name="EDI Dictionary"
+              parent="edi_provider_menu_root" action="edi_dictionary_action"/>
 </odoo>

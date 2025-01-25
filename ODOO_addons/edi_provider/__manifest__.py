@@ -10,14 +10,13 @@
         'security/ir.model.access.csv',
         'views/edi_provider_views.xml',
         'views/edi_format_views.xml',
-        'views/edi_dictionary_views.xml',   # ✅ Include the new menu file
-        'views/edi_dictionary_template.xml'
+        'views/edi_dictionary_menu.xml', 
     ],
-    'assets': {
-        'web.assets_frontend': [
-            'edi_provider/static/html/edi_dictionary.html',
-        ],
-    },
+'assets': {
+    'web.assets_backend': [
+        'edi_provider/static/html/edi_dictionary.html',
+    ],
+},
     'installable': True,
     'auto_install': False,
     'application': True,
