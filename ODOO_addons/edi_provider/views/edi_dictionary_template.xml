@@ -1,0 +1,10 @@
+<odoo>
+    <template id="edi_dictionary_template" name="EDI Dictionary">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1>What is EDI?</h1>
+                <t t-raw="0"/>
+            </div>
+        </t>
+    </template>
+</odoo>
