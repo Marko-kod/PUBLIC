@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_edi_provider,EDI Provider Access,model_edi_provider,,1,1,1,1
 access_edi_format,EDI Format Access,model_edi_format,,1,1,1,1
-access_edi_dictionary,EDI Dictionary Access,model_edi_dictionary,,1,1,1,1
