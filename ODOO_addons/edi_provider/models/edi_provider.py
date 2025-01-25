@@ -5,21 +5,10 @@ class EDIProvider(models.Model):
     _description = 'EDI Provider'
     
     name = fields.Char(string="Provider Name", required=True)
-    communication_method = fields.Selection([
-        ('as2', 'AS2'),
-        ('as4', 'AS4'),
-        ('sftp', 'SFTP'),
-        ('ftp', 'FTP'),
-        ('local', 'Local Folder'),
-    ], string="Communication Method", required=True)
-    auth_type = fields.Selection([
-        ('basic', 'Basic Authentication'),
-        ('oauth', 'OAuth 2.0'),
-        ('cert', 'Certificate-Based Authentication'),
-    ], string="Authentication Type", required=True)
-    username = fields.Char(string="Username")
-    password = fields.Char(string="Password")
-    api_url = fields.Char(string="API URL")
+    streat = fields.Char(string="Streat")
+    town = fields.Char(string="Town")
+    zip = fields.Char(string="Zip code")
+    vat = fields.Char(string="VAT number")
     notes = fields.Text(string="Notes")
 
     # SOAP WS
