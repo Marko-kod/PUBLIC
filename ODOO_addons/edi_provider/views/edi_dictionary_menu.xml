@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add menu item for EDI Dictionary -->
+    <menuitem id="edi_dictionary_menu"
+              name="EDI Dictionary"
+              parent="edi_provider_menu_root"
+              action="edi_dictionary_action"/>
+</odoo>

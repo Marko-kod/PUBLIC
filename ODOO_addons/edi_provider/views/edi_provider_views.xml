@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Definicija akcije (MORA BITI PRVA) -->
+    <record id="edi_provider_action" model="ir.actions.act_window">
+        <field name="name">EDI Providers</field>
+        <field name="res_model">edi.provider</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Kategorija aplikacije za bolju vidljivost u glavnom meniju -->
+    <record id="edi_provider_category" model="ir.module.category">
+        <field name="name">EDI Management</field>
+        <field name="description">EDI Management Category</field>
+    </record>
+
+    <!-- Glavni meni -->
+    <menuitem id="edi_provider_menu_root" name="EDI Management" sequence="5" groups="base.group_user"/>
+
+    <!-- Podmeni za EDI providere -->
+    <menuitem id="edi_provider_menu" name="EDI Providers"
+              parent="edi_provider_menu_root" action="edi_provider_action" groups="base.group_user"/>
+              
+
+    <!-- Prikaz forme -->
+    <record id="edi_provider_form" model="ir.ui.view">
+        <field name="name">edi.provider.form</field>
+        <field name="model">edi.provider</field>
+        <field name="arch" type="xml">
+            <form string="EDI Provider">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="communication_method"/>
+                        <field name="auth_type"/>
+                        <field name="username"/>
+                        <field name="password" password="True"/>
+                        <field name="api_url"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Prikaz liste -->
+    <record id="edi_provider_tree" model="ir.ui.view">
+        <field name="name">edi.provider.tree</field>
+        <field name="model">edi.provider</field>
+        <field name="arch" type="xml">
+            <tree string="EDI Providers">
+                <field name="name"/>
+                <field name="communication_method"/>
+                <field name="auth_type"/>
+                <field name="api_url"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

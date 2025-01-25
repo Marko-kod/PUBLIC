@@ -1,0 +1,10 @@
+<odoo>
+    <menuitem id="edi_dictionary_menu" name="EDI Dictionary"
+              parent="edi_provider_menu_root" action="edi_dictionary_action"/>
+
+    <record id="edi_dictionary_action" model="ir.actions.act_url">
+        <field name="name">EDI Dictionary</field>
+        <field name="url">/edi/dictionary</field>
+        <field name="target">self</field>
+    </record>
+</odoo>
