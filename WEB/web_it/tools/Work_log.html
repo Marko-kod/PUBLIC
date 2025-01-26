@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Log Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #282c36;
+            color: #cdd2da;
+            padding: 20px;
+        }
+        h2, h3 {
+            border-bottom: 2px solid #3a3f4b;
+            padding-bottom: 10px;
+        }
+        label, button {
+            display: block;
+            margin-bottom: 10px;
+			margin-top: 25px;
+        }
+        input {
+            padding: 8px 12px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            background-color: #3a3f4b;
+            color: #cdd2da;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+			margin-top: 15px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #3a3f4b;
+            text-align: left;
+        }
+        th {
+            background-color: #3a3f4b;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #313641;
+        }
+        .task-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .task {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Work Log Tracker</h2>
+
+    <div class="task-container">
+        <div class="task">
+            <h3>Task 1</h3>
+			<p id="elapsedTime1">Elapsed Time: 0:00:00</p>
+            <label for="description1">Description:</label>
+            <input type="text" id="description1" placeholder="Enter work description">
+            <label for="client1">Client:</label>
+            <input type="text" id="client1" placeholder="Enter client name">
+            <label for="ticket1">Ticket Number:</label>
+            <input type="text" id="ticket1" placeholder="Enter number of ticket">
+            <button onclick="startTimer(1)" id="startButton1">Start</button>
+            <button onclick="pauseTimer(1)" id="pauseButton1" disabled>Pause</button>
+            <button onclick="resumeTimer(1)" id="resumeButton1" disabled>Resume</button>
+            <button onclick="stopTimer(1)" disabled id="stopButton1">Stop</button>
+        </div>
+        <div class="task">
+            <h3>Task 2</h3>
+			<p id="elapsedTime2">Elapsed Time: 0:00:00</p>
+            <label for="description2">Description:</label>
+            <input type="text" id="description2" placeholder="Enter work description">
+            <label for="client2">Client:</label>
+            <input type="text" id="client2" placeholder="Enter client name">
+            <label for="ticket2">Ticket Number:</label>
+            <input type="text" id="ticket2" placeholder="Enter number of ticket">
+            <button onclick="startTimer(2)" id="startButton2">Start</button>
+            <button onclick="pauseTimer(2)" id="pauseButton2" disabled>Pause</button>
+            <button onclick="resumeTimer(2)" id="resumeButton2" disabled>Resume</button>
+            <button onclick="stopTimer(2)" disabled id="stopButton2">Stop</button>
+        </div>
+    </div>
+
+    <h3>Logs:</h3>
+    <h3><p id="summedTime">00:00:00</p></h3>
+
+    <table id="logs">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Ticket Number</th>
+                <th>Client</th>
+                <th>Time Spent</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button onclick="generateCSV()" id="finishButton" disabled>Finished</button>
+    <button onclick="document.getElementById('fileInput').click()">Import Logs</button>
+    <input type="file" id="fileInput" style="display:none" onchange="importLogs(event)" accept=".csv">
+    <button onclick="clearLogs()">Clear Logs</button>
+	
+	
+	    <footer style="margin-top: 50px; text-align: center;">
+        <p>&copy; 2023 Marko Korenić. All Rights Reserved.</p>
+        <p>Powered by MK.</p>
+    </footer>
+
+    <script>
+        const startTime = [null, null];
+        const pausedTime = [null, null];
+        const totalTimePaused = [0, 0];
+        const logsList = [];
+        const elapsedIntervals = [null, null];
+        const taskStatus = ['Stop', 'Stop'];
+
+        function startTimer(task) {
+            const description = document.getElementById(`description${task}`).value;
+            const client = document.getElementById(`client${task}`).value;
+            if (description && client) {
+                if (!startTime[task - 1]) {
+                    startTime[task - 1] = new Date();
+                }
+                document.getElementById(`stopButton${task}`).disabled = false;
+                document.getElementById(`pauseButton${task}`).disabled = false;
+
+                if (elapsedIntervals[task - 1]) clearInterval(elapsedIntervals[task - 1]);
+
+                elapsedIntervals[task - 1] = setInterval(() => {
+                    const now = new Date();
+                    const elapsed = (now - startTime[task - 1]) / 1000 - totalTimePaused[task - 1];
+                    const formattedTime = formatTime(Math.floor(elapsed));
+                    document.getElementById(`elapsedTime${task}`).textContent = `Elapsed Time: ${formattedTime}`;
+                }, 1000);
+            } else {
+                alert('Description and Client fields cannot be empty!');
+            }
+            taskStatus[task - 1] = 'Start';
+            checkAllTasksStopped();
+        }
+
+        function pauseTimer(task) {
+            clearInterval(elapsedIntervals[task - 1]);
+            pausedTime[task - 1] = new Date();
+            document.getElementById(`resumeButton${task}`).disabled = false;
+            document.getElementById(`pauseButton${task}`).disabled = true;
+            document.getElementById(`startButton${task}`).disabled = true;
+            document.getElementById(`stopButton${task}`).disabled = true;
+            taskStatus[task - 1] = 'Pause';
+            checkAllTasksStopped();
+        }
+
+        function resumeTimer(task) {
+            const resumeTime = new Date();
+            totalTimePaused[task - 1] += (resumeTime - pausedTime[task - 1]) / 1000;
+            document.getElementById(`resumeButton${task}`).disabled = true;
+            document.getElementById(`pauseButton${task}`).disabled = false;
+            document.getElementById(`startButton${task}`).disabled = false;
+            document.getElementById(`stopButton${task}`).disabled = false;
+            
+            elapsedIntervals[task - 1] = setInterval(() => {
+                const now = new Date();
+                const elapsed = (now - startTime[task - 1]) / 1000 - totalTimePaused[task - 1];
+                const formattedTime = formatTime(Math.floor(elapsed));
+                document.getElementById(`elapsedTime${task}`).textContent = `Elapsed Time: ${formattedTime}`;
+            }, 1000);
+            taskStatus[task - 1] = 'Start';
+            checkAllTasksStopped();
+        }
+
+        function stopTimer(task) {
+            clearInterval(elapsedIntervals[task - 1]);
+            document.getElementById(`elapsedTime${task}`).textContent = 'Elapsed Time: 0:00:00';
+
+            const stopTime = new Date();
+            const timeSpent = (stopTime - startTime[task - 1]) / 1000 - totalTimePaused[task - 1];
+            const hours = Math.floor(timeSpent / 3600);
+            const minutes = Math.floor((timeSpent % 3600) / 60);
+            const seconds = timeSpent % 60;
+            const description = document.getElementById(`description${task}`).value;
+            const ticket = document.getElementById(`ticket${task}`).value;
+            const client = document.getElementById(`client${task}`).value;
+            const date = new Date().toISOString().slice(0, 10);
+            if (description && client) {
+                const logData = `;${date};${description};${ticket};;${client};${hours}:${minutes}:${Math.round(seconds)}`;
+                logsList.push(logData);
+                const table = document.getElementById('logs').querySelector('tbody');
+                const row = table.insertRow();
+                row.insertCell().textContent = date;
+                row.insertCell().textContent = description;
+                row.insertCell().textContent = ticket;
+                row.insertCell().textContent = client;
+                row.insertCell().textContent = `${hours}:${minutes}:${Math.round(seconds)}`;
+                updateSummedTime();
+            } else {
+                alert('Description and Client fields cannot be empty!');
+            }
+            totalTimePaused[task - 1] = 0;
+            document.getElementById(`pauseButton${task}`).disabled = true;
+            document.getElementById(`resumeButton${task}`).disabled = true;
+            document.getElementById(`stopButton${task}`).disabled = true;
+            document.getElementById(`description${task}`).value = '';
+            document.getElementById(`ticket${task}`).value = '';
+            document.getElementById(`client${task}`).value = '';
+            startTime[task - 1] = null;
+            taskStatus[task - 1] = 'Stop';
+            checkAllTasksStopped();
+        }
+
+        function checkAllTasksStopped() {
+            const allStopped = taskStatus.every(status => status === 'Stop');
+            document.getElementById('finishButton').disabled = !allStopped;
+        }
+
+        function generateCSV() {
+            const blob = new Blob([logsList.join("\n")], { type: "text/csv;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `LOG_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            logsList.length = 0;
+            document.getElementById('logs').querySelector('tbody').innerHTML = '';
+        }
+
+        function updateSummedTime() {
+            const rows = document.getElementById('logs').querySelector('tbody').rows;
+            let totalSeconds = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+                const timeCell = rows[i].cells[4].textContent;
+                const [hours, minutes, seconds] = timeCell.split(':').map(Number);
+
+                totalSeconds += hours * 3600 + minutes * 60 + seconds;
+            }
+
+            document.getElementById('summedTime').textContent = formatTime(totalSeconds);
+        }
+
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function importLogs(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const lines = event.target.result.split('\n');
+                    for (let line of lines) {
+                        const [_, date, description, ticket, , client, timeSpent] = line.split(';');
+                        if (description && client) {
+                            logsList.push(line);
+
+                            const table = document.getElementById('logs').querySelector('tbody');
+                            const row = table.insertRow();
+                            row.insertCell().textContent = date;
+                            row.insertCell().textContent = description;
+                            row.insertCell().textContent = ticket;
+                            row.insertCell().textContent = client;
+                            row.insertCell().textContent = timeSpent;
+                        }
+                    }
+                    updateSummedTime();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+		function clearLogs() {
+			let confirmation = confirm("Clear all logs? :-)");
+			if (confirmation) {
+				logsList.length = 0;
+				document.getElementById('logs').querySelector('tbody').innerHTML = '';
+				document.getElementById('summedTime').textContent = '00:00:00';
+			}
+		}
+
+
+        checkAllTasksStopped();
+    </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Viewer and Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        pre {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-family: monospace;
+            height: 400px;
+        }
+        span.xml-value {
+            background-color: #e8f0fe;
+            cursor: pointer;
+        }
+        .editor {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>XML Viewer and Editor</h1>
+    <input type="file" id="fileInput" accept=".xml">
+    <button id="parseBtn">Parse XML</button>
+    <pre id="output">XML content will appear here...</pre>
+
+    <div class="editor">
+        <label for="editValue">Edit Selected Value:</label>
+        <input type="text" id="editValue" disabled>
+        <button id="applyEdit">Apply Edit</button>
+    </div>
+    <button id="downloadBtn">Download Modified XML</button>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const parseBtn = document.getElementById('parseBtn');
+        const output = document.getElementById('output');
+        const editValue = document.getElementById('editValue');
+        const applyEdit = document.getElementById('applyEdit');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let rawContent = '';
+        let xmlDoc = null;
+        let selectedNode = null;
+
+        // Function to pretty print XML with clickable spans for values
+        function formatXMLWithSpans(node, indent = '') {
+            let result = '';
+            const children = Array.from(node.childNodes);
+            children.forEach((child) => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    const textContent = child.textContent.trim();
+                    if (textContent) {
+                        result += `${indent}<span class="xml-value" data-xpath="${getXPath(child)}">${textContent}</span>\n`;
+                    }
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    const tagName = child.tagName;
+                    result += `${indent}&lt;${tagName}&gt;\n`;
+                    result += formatXMLWithSpans(child, indent + '  ');
+                    result += `${indent}&lt;/${tagName}&gt;\n`;
+                }
+            });
+            return result;
+        }
+
+        // Function to calculate XPath
+        function getXPath(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node = node.parentNode;
+            }
+            let path = '';
+            while (node && node.nodeType === Node.ELEMENT_NODE) {
+                const siblings = Array.from(node.parentNode.children).filter(
+                    (sibling) => sibling.tagName === node.tagName
+                );
+                const index = siblings.indexOf(node) + 1;
+                path = `/${node.tagName}[${index}]` + path;
+                node = node.parentNode;
+            }
+            return path;
+        }
+
+        // File upload handler
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    rawContent = e.target.result;
+                    output.textContent = 'File loaded. Click "Parse XML" to view formatted content.';
+                };
+                reader.onerror = () => {
+                    output.textContent = 'Error reading file.';
+                };
+                reader.readAsText(file);
+            } else {
+                output.textContent = 'No file selected.';
+            }
+        });
+
+        // Parse XML and display formatted content with spans
+        parseBtn.addEventListener('click', () => {
+            if (!rawContent) {
+                output.textContent = 'No XML content to parse. Please upload a file first.';
+                return;
+            }
+            const parser = new DOMParser();
+            xmlDoc = parser.parseFromString(rawContent, 'application/xml');
+            const parserError = xmlDoc.querySelector('parsererror');
+            if (parserError) {
+                output.textContent = 'Error: Invalid XML file.';
+            } else {
+                output.innerHTML = formatXMLWithSpans(xmlDoc.documentElement);
+            }
+        });
+
+        // Select text node for editing
+        output.addEventListener('click', (event) => {
+            if (event.target.classList.contains('xml-value')) {
+                selectedNode = event.target;
+                editValue.value = selectedNode.textContent.trim();
+                editValue.disabled = false;
+            }
+        });
+
+        // Apply edits to the selected node
+        applyEdit.addEventListener('click', () => {
+            if (selectedNode && xmlDoc) {
+                const xpath = selectedNode.getAttribute('data-xpath');
+                const targetNode = xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+                if (targetNode) {
+                    targetNode.textContent = editValue.value; // Update xmlDoc
+                    selectedNode.textContent = editValue.value; // Update span in the preview
+                } else {
+                    console.error('Failed to locate the corresponding node in xmlDoc.');
+                }
+            }
+        });
+
+        // Download modified XML
+        downloadBtn.addEventListener('click', () => {
+            if (xmlDoc) {
+                const serializer = new XMLSerializer();
+                const xmlString = serializer.serializeToString(xmlDoc);
+                const blob = new Blob([xmlString], { type: 'application/xml' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'modified.xml';
+                a.click();
+            }
+        });
+    </script>
+</body>
+</html>

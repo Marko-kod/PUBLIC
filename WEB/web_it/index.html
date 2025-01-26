@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Toolbox</title>
+<link rel="stylesheet" href="css/style.css">
+<script>
+    function loadTool(url) {
+        const iframe = document.getElementById('toolFrame');
+        iframe.src = url;
+
+        // Ensure iframe resizes continuously as content loads or changes
+        iframe.onload = function() {
+            function resizeIframe() {
+                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                iframe.style.height = iframeDocument.documentElement.scrollHeight + "px";
+            }
+
+            // Resize initially and monitor further changes
+            resizeIframe();
+            setInterval(resizeIframe, 500); // Check height every 500ms for dynamic changes
+        };
+    }
+</script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 IT Developer Toolbox 🌌</h1>
+        <p>Select a tool below and dive into the world of coding madness!</p>
+        <ul class="menu">
+            <li><a href="#" onclick="loadTool('tools/odoo_module_generator.html')">Odoo Module Generator</a></li>
+            <li><a href="#" onclick="loadTool('coming_soon.html')">Coming Soon...</a></li>
+        </ul>
+        <div class="iframe-container">
+            <iframe id="toolFrame" src="" ></iframe>
+        </div>
+    </div>
+</body>
+</html>

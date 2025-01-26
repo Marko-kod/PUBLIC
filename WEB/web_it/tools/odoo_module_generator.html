@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo Module Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Odoo Module Generator</h2>
+        <label for="moduleFolder">Enter Module Folder Name:</label>
+        <input type="text" id="moduleFolder" placeholder="module_folder">
+        <label for="moduleName">Enter Module Name (Manifest):</label>
+        <input type="text" id="moduleName" placeholder="Module Name">
+        <label for="moduleVersion">Enter Version:</label>
+        <input type="text" id="moduleVersion" placeholder="1.0">
+        <label for="moduleSummary">Enter Summary:</label>
+        <input type="text" id="moduleSummary" placeholder="Module description">
+        <label for="moduleAuthor">Enter Author:</label>
+        <input type="text" id="moduleAuthor" placeholder="Your name">
+        <label for="moduleCategory">Enter Category:</label>
+        <input type="text" id="moduleCategory" placeholder="Category">
+        <label for="moduleLicense">License:</label>
+        <input type="text" id="moduleLicense" value="LGPL-3" readonly>
+        <label for="installable">Installable:</label>
+        <select id="installable">
+            <option value="True">True</option>
+            <option value="False">False</option>
+        </select>
+        <label for="application">Application:</label>
+        <select id="application">
+            <option value="True">True</option>
+            <option value="False">False</option>
+        </select>
+        <label for="autoInstall">Auto Install:</label>
+        <select id="autoInstall">
+            <option value="False">False</option>
+            <option value="True">True</option>
+        </select>
+        <button onclick="generateZip()">Generate ZIP</button>
+    </div>
+    <script>
+        function generateZip() {
+            const moduleFolder = document.getElementById("moduleFolder").value.trim();
+            const moduleName = document.getElementById("moduleName").value.trim();
+            const moduleVersion = document.getElementById("moduleVersion").value.trim();
+            const moduleSummary = document.getElementById("moduleSummary").value.trim();
+            const moduleAuthor = document.getElementById("moduleAuthor").value.trim();
+            const moduleCategory = document.getElementById("moduleCategory").value.trim();
+            const moduleLicense = document.getElementById("moduleLicense").value.trim();
+            const installable = document.getElementById("installable").value;
+            const application = document.getElementById("application").value;
+            const autoInstall = document.getElementById("autoInstall").value;
+            
+            if (!moduleFolder || !moduleName) {
+                alert("Please enter both module folder name and module name.");
+                return;
+            }
+            
+            if (typeof JSZip === 'undefined') {
+                alert("JSZip library is not loaded. Check your internet connection.");
+                return;
+            }
+            
+            const zip = new JSZip();
+            const folders = [
+                "controllers/", "data/", "models/", "report/", "security/", "static/img/", 
+                "static/lib/", "static/src/js/", "static/src/scss/", "static/src/xml/", "views/", "wizard/"
+            ];
+            
+            zip.file(`${moduleFolder}/__init__.py`, "");
+            zip.file(`${moduleFolder}/__manifest__.py`, `{
+    'name': '${moduleName}',
+    'version': '${moduleVersion}',
+    'summary': '${moduleSummary}',
+    'author': '${moduleAuthor}',
+    'category': '${moduleCategory}',
+    'license': '${moduleLicense}',
+    'depends': [],
+    'data': [],
+    'installable': ${installable},
+    'application': ${application},
+    'auto_install': ${autoInstall},
+}`);
+            zip.file(`${moduleFolder}/controllers/__init__.py`, "");
+            zip.file(`${moduleFolder}/models/__init__.py`, "");
+            zip.file(`${moduleFolder}/report/__init__.py`, "");
+            
+            folders.forEach(folder => {
+                zip.folder(`${moduleFolder}/${folder}`);
+            });
+            
+            zip.generateAsync({ type: "blob" }).then(function(content) {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(content);
+                link.download = `${moduleFolder}.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(function(err) {
+                alert("Error generating ZIP: " + err);
+            });
+        }
+    </script>
+</body>
+</html>

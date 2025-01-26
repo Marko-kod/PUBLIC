@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pretty XML Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Allow wrapping */
+        }
+        .highlight {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+        .highlight span.tag {
+            color: #61dafb;
+        }
+        .highlight span.attr {
+            color: #d19a66;
+        }
+        .highlight span.value {
+            color: #98c379;
+        }
+        .highlight span.text {
+            color: #e06c75;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pretty XML Preview</h1>
+    <form>
+        <label for="jsonFile">Upload JSON File:</label>
+        <input type="file" id="jsonFile" accept=".json" required>
+        <br><br>
+        <label for="xslFile">Upload XSL File:</label>
+        <input type="file" id="xslFile" accept=".xsl, .xml" required>
+        <br><br>
+        <button type="button" onclick="convertJsonToXml()">Convert</button>
+    </form>
+
+    <h2>Output XML</h2>
+    <div id="outputXml" class="highlight"></div>
+    <br><br>
+    <button id="downloadButton" style="display: none;" onclick="downloadXml()">Download XML</button>
+
+    <script>
+        let generatedXml = ""; // To store the generated XML content
+
+        async function convertJsonToXml() {
+            const jsonFile = document.getElementById("jsonFile").files[0];
+            const xslFile = document.getElementById("xslFile").files[0];
+
+            if (!jsonFile || !xslFile) {
+                alert("Please upload both JSON and XSL files.");
+                return;
+            }
+
+            try {
+                // Step 1: Read and parse the JSON file
+                const jsonText = await jsonFile.text();
+                const jsonData = JSON.parse(jsonText);
+
+                // Step 2: Convert JSON to intermediate XML
+                const intermediateXml = jsonToXml(jsonData);
+
+                // Step 3: Read and parse the XSL file
+                const xslText = await xslFile.text();
+                const xslDoc = new DOMParser().parseFromString(xslText, "application/xml");
+
+                // Check if the XSL file is valid
+                if (xslDoc.querySelector("parsererror")) {
+                    throw new Error("The XSL file is invalid. Please check its structure.");
+                }
+
+                // Step 4: Apply XSL transformation
+                const xmlDoc = new DOMParser().parseFromString(intermediateXml, "application/xml");
+                const xsltProcessor = new XSLTProcessor();
+                xsltProcessor.importStylesheet(xslDoc);
+
+                const resultDocument = xsltProcessor.transformToDocument(xmlDoc);
+                const resultXml = new XMLSerializer().serializeToString(resultDocument);
+
+                // Step 5: Display the output
+                generatedXml = formatXml(resultXml); // Save the generated XML for downloading
+                document.getElementById("outputXml").innerHTML = syntaxHighlight(generatedXml);
+
+                // Enable the download button
+                document.getElementById("downloadButton").style.display = "inline-block";
+            } catch (error) {
+                console.error("Error occurred:", error);
+                alert(`An error occurred during the conversion process: ${error.message}`);
+            }
+        }
+
+        // Function to convert JSON to intermediate XML
+        function jsonToXml(jsonData) {
+            let xml = "<root>";
+            jsonData.forEach(entry => {
+                xml += `<entry><key>${entry.key}</key><value>${entry.value || ""}</value></entry>`;
+            });
+            xml += "</root>";
+            return xml;
+        }
+
+        // Function to format XML for better readability
+        function formatXml(xml) {
+            const formatted = xml.replace(/(>)(<)(\/*)/g, "$1\n$2$3");
+            const pad = "  ";
+            let indent = 0;
+            return formatted.split("\n").map(line => {
+                if (line.match(/<\/\w>/)) indent -= 1;
+                const padding = new Array(indent).fill(pad).join("");
+                if (line.match(/<\w[^>]*[^\/]>.*$/)) indent += 1;
+                return padding + line;
+            }).join("\n");
+        }
+
+        // Function to add syntax highlighting to XML
+        function syntaxHighlight(xml) {
+            return xml.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/(&lt;\/?)(\w+)/g, '$1<span class="tag">$2</span>')
+                .replace(/(\w+)="(.*?)"/g, '<span class="attr">$1</span>="<span class="value">$2</span>"')
+                .replace(/(&gt;)([^<]*)/g, '$1<span class="text">$2</span>');
+        }
+
+        // Function to download the generated XML file
+        function downloadXml() {
+            if (!generatedXml) {
+                alert("No XML generated to download.");
+                return;
+            }
+
+            const blob = new Blob([generatedXml], { type: "application/xml" });
+            const now = new Date();
+            const filename = `data_${now.toISOString().replace(/[:.]/g, "-")}.xml`;
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+    </script>
+</body>
+</html>

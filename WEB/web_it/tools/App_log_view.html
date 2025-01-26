@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Viewer with Enhanced XML Formatting</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input {
+      margin-bottom: 20px;
+    }
+    .log-viewer {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #f9f9f9;
+      overflow-y: auto;
+      height: 100%;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .log-entry {
+      margin-bottom: 10px;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    .timestamp {
+      color: #007bff;
+      font-weight: bold;
+    }
+    .level {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .message {
+      color: #333;
+    }
+    .logger {
+      color: #6c757d;
+      font-style: italic;
+    }
+    .xml-viewer {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 14px;
+      color: #333;
+    }
+    .xml-tag {
+      color: #1a73e8;
+      font-weight: bold;
+    }
+    .xml-attribute {
+      color: #d93025;
+    }
+    .xml-text {
+      color: #333;
+    }
+    .download-button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .download-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Log Viewer with Enhanced XML Formatting</h1>
+  <p>Select a log file to upload and view its content:</p>
+  <input type="file" id="fileInput" accept=".log">
+  <div class="log-viewer" id="logViewer"></div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const logViewer = document.getElementById('logViewer');
+
+    fileInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file && file.name.endsWith('.log')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const content = e.target.result;
+          displayLogs(content);
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Please upload a valid .log file.');
+      }
+    });
+
+    function formatXMLWithHighlighting(xml) {
+      return xml
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/(&lt;\/?)([a-zA-Z0-9_:-]+)([^&gt;]*)(\/?&gt;)/g, (_, p1, p2, p3, p4) => {
+          const attributes = p3.replace(
+            /([a-zA-Z0-9_:-]+)=["']([^"']*)["']/g,
+            `<span class="xml-attribute">$1</span>=<span class="xml-text">"$2"</span>`
+          );
+          return `<span class="xml-tag">${p1}${p2}</span>${attributes}<span class="xml-tag">${p4}</span>`;
+        });
+    }
+
+    function getMessageIDFromXML(xml) {
+      const messageIDMatch = xml.match(/<messageID>(.*?)<\/messageID>/);
+      return messageIDMatch ? messageIDMatch[1] : "log";
+    }
+
+    function createDownloadButton(xmlContent, fileName) {
+      const blob = new Blob([xmlContent], { type: "application/xml" });
+      const url = URL.createObjectURL(blob);
+
+      const downloadButton = document.createElement("a");
+      downloadButton.href = url;
+      downloadButton.download = fileName;
+      downloadButton.textContent = "Download XML";
+      downloadButton.classList.add("download-button");
+
+      return downloadButton;
+    }
+
+    function displayLogs(content) {
+      logViewer.innerHTML = ''; // Clear previous content
+      const lines = content.split('\n');
+
+      lines.forEach(line => {
+        if (line.trim()) {
+          const logEntry = document.createElement('div');
+          logEntry.classList.add('log-entry');
+
+          try {
+            const logData = JSON.parse(line);
+
+            const timestamp = `<span class="timestamp">${logData["@timestamp"] || "N/A"}</span>`;
+            const level = `<span class="level">${logData.level || logData.level_value || "N/A"}</span>`;
+            const message = `<span class="message">${logData.message || "No message"}</span>`;
+            const logger = `<span class="logger">${logData.logger_name || "Unknown Logger"}</span>`;
+
+            logEntry.innerHTML = `${timestamp} - ${level} - ${message} <br><small>${logger}</small>`;
+
+            // Check for XML in message content
+            const xmlMatch = logData.message.match(/content=(<\?xml.*>[\s\S]*<\/.*?>)/);
+            if (xmlMatch) {
+              const xmlContent = xmlMatch[1];
+              const formattedXML = formatXMLWithHighlighting(xmlContent);
+
+              const xmlViewer = document.createElement('pre');
+              xmlViewer.classList.add('xml-viewer');
+              xmlViewer.innerHTML = formattedXML;
+
+              // Extract messageID for file name
+              const fileName = `${getMessageIDFromXML(xmlContent)}.xml`;
+
+              const downloadButton = createDownloadButton(xmlContent, fileName);
+
+              logEntry.appendChild(xmlViewer);
+              logEntry.appendChild(downloadButton);
+            }
+          } catch {
+            logEntry.textContent = line; // If not JSON, display raw line
+          }
+
+          logViewer.appendChild(logEntry);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
