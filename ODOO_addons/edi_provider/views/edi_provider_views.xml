@@ -42,11 +42,10 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="communication_method"/>
-                        <field name="auth_type"/>
-                        <field name="username"/>
-                        <field name="password" password="True"/>
-                        <field name="api_url"/>
+                        <field name="streat"/>
+                        <field name="town"/>
+                        <field name="zip"/>
+                        <field name="vat"/>
                         <field name="notes"/>
                     </group>
                     <notebook string="EDI Connection">
@@ -106,10 +105,12 @@
         <field name="model">edi.provider</field>
         <field name="arch" type="xml">
             <tree string="EDI Providers">
-                <field name="name"/>
-                <field name="communication_method"/>
-                <field name="auth_type"/>
-                <field name="api_url"/>
+                          <field name="name"/>
+                        <field name="streat"/>
+                        <field name="town"/>
+                        <field name="zip"/>
+                        <field name="vat"/>
+                        <field name="notes"/>
             </tree>
         </field>
     </record>
