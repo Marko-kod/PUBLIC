@@ -1,0 +1,25 @@
+﻿msgid ""
+msgstr ""
+"Project-Id-Version: edi_provider\n"
+"POT-Creation-Date: 2024-01-26 12:00+0000\n"
+"PO-Revision-Date: 2024-01-26 12:00+0000\n"
+"Last-Translator: Marko Korenić\n"
+"Language-Team: Croatian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Prijevod naziva menija
+msgid "EDI Management"
+msgstr "EDI Upravljanje"
+
+msgid "EDI Providers"
+msgstr "EDI Pružatelji"
+
+msgid "EDI Formats"
+msgstr "EDI Formati"
+
+msgid "EDI QA"
+msgstr "EDI Pitanja i Odgovori"

@@ -18,5 +18,6 @@
     'installable': True,
     'application': True,
     'auto_install': False,
-    'images': ['static/description/icon.png'],  # Ensure this image exists at the specified path
+    'images': ['static/description/icon.png'],
+    'i18n': ['i18n/hr.po'],
 }
