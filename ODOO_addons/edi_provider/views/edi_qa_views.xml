@@ -1,0 +1,42 @@
+<odoo>
+    <!-- Akcija za prikaz EDI QA -->
+    <record id="edi_qa_action" model="ir.actions.act_window">
+        <field name="name">EDI QA</field>
+        <field name="res_model">edi.qa</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Meni opcija za EDI QA -->
+    <menuitem id="edi_qa_menu" name="EDI QA"
+              parent="edi_provider_menu_root" action="edi_qa_action"
+              sequence="4"/>
+
+    <!-- Prikaz forme -->
+    <record id="edi_qa_form" model="ir.ui.view">
+        <field name="name">edi.qa.form</field>
+        <field name="model">edi.qa</field>
+        <field name="arch" type="xml">
+            <form string="EDI Questions and Answers">
+                <sheet>
+                    <group>
+                        <field name="question"/>
+                        <field name="answer"/>
+                        <field name="category"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Prikaz liste -->
+    <record id="edi_qa_tree" model="ir.ui.view">
+        <field name="name">edi.qa.tree</field>
+        <field name="model">edi.qa</field>
+        <field name="arch" type="xml">
+            <tree string="EDI QA">
+                <field name="question"/>
+                <field name="category"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

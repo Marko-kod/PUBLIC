@@ -9,7 +9,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/edi_provider_views.xml',
-        'views/edi_format_views.xml',        
+        'views/edi_format_views.xml',
+        'views/edi_qa_views.xml',        
 
     ],
 
