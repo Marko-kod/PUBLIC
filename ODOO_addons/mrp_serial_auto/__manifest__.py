@@ -10,5 +10,6 @@
     'application': False,
     'auto_install': False,
     'data': ['data/sequence.xml'],
+    'images': ['static/description/icon.png'],
 
 }

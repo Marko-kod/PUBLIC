@@ -33,10 +33,10 @@
         <field name="name">edi.qa.tree</field>
         <field name="model">edi.qa</field>
         <field name="arch" type="xml">
-            <tree string="EDI QA">
-                <field name="question"/>
-                <field name="category"/>
-            </tree>
+     <tree string="EDI QA">
+    <field name="question" width="25%"/>  <!-- 40% of the available space -->
+    <field name="answer" width="75%"/>    <!-- 60% of the available space -->
+</tree>
         </field>
     </record>
 </odoo>

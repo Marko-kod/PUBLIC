@@ -5,7 +5,7 @@
     'author': 'Marko Korenić',
     'category': 'Accounting',
     'license': 'LGPL-3',
-    'depends': ['base', 'website'],  # Ensure 'website' is included if you're using website features
+    'depends': ['base'],  # Ensure 'website' is included if you're using website features
     'data': [
         'security/ir.model.access.csv',
         'views/edi_provider_views.xml',
