@@ -7,6 +7,7 @@ body {
     display: flex;
     height: 100vh;
     overflow: hidden;
+    flex-direction: row;
 }
 .menu-container {
     width: 250px;
@@ -22,6 +23,8 @@ body {
     left: 0;
     top: 0;
     overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
 }
 .menu-container h1 {
     color: #00f3ff;
@@ -55,26 +58,87 @@ body {
     transform: scale(1.05);
 }
 .content-container {
-    margin-left: 300px;
+    margin-left: 310px;
     flex-grow: 1;
     padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     height: 100vh;
     box-sizing: border-box;
+    overflow: hidden;
 }
 .iframe-container {
-    width: 100%;
-    height: 95vh;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
     border: 2px solid #00f3ff;
     border-radius: 5px;
     overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 iframe {
     width: 100%;
     height: 100%;
     border: none;
     background: #000;
+    position: relative;
+    z-index: 999;
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    .menu-container {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #0f3460;
+        padding: 10px;
+        border-bottom: 2px solid #00f3ff;
+        z-index: 1000;
+    }
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .menu li {
+        margin: 5px;
+    }
+    .menu a {
+        padding: 8px;
+        font-size: 14px;
+    }
+    .content-container {
+        margin-left: 0;
+        
+        
+        width: 100%;
+         padding-top: 330px;
+        
+        
+    }
+    .iframe-container {
+        width: calc(100vh - 80px);
+        height: calc(100vh - 350px);
+        margin-left: 0;
+        justify-content: center;
+        align-items: center;
+       
+        
+    }
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #000;
+        position: relative;
+        z-index: 999;
+    }
 }
