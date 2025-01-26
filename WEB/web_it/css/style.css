@@ -59,6 +59,7 @@ body {
 }
 .menu ul {
     padding-left: 15px;
+    list-style: none;
 }
 .menu ul li {
     margin: 5px 0;
