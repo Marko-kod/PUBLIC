@@ -57,6 +57,20 @@ body {
     color: #000;
     transform: scale(1.05);
 }
+.menu ul {
+    padding-left: 15px;
+}
+.menu ul li {
+    margin: 5px 0;
+}
+.menu ul a {
+    font-size: 12px;
+    padding: 8px;
+    background: #0099cc;
+}
+.menu ul a:hover {
+    background: #0077aa;
+}
 .content-container {
     margin-left: 310px;
     flex-grow: 1;
@@ -115,14 +129,14 @@ iframe {
         padding: 8px;
         font-size: 14px;
     }
+    .menu ul a {
+        font-size: 10px;
+        padding: 6px;
+    }
     .content-container {
         margin-left: 0;
-        
-        
         width: 100%;
-         padding-top: 330px;
-        
-        
+        padding-top: 330px;
     }
     .iframe-container {
         width: calc(100vh - 80px);
@@ -130,8 +144,6 @@ iframe {
         margin-left: 0;
         justify-content: center;
         align-items: center;
-       
-        
     }
     iframe {
         width: 100%;
