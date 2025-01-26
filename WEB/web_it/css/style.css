@@ -2,25 +2,26 @@ body {
     font-family: 'Courier New', monospace;
     background-color: #1a1a2e;
     color: #ffffff;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
     display: flex;
-    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
 }
 .menu-container {
     width: 250px;
     background: #0f3460;
     padding: 20px;
-    border-radius: 10px;
     box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.5);
-    border: 2px solid #00f3ff;
+    border-right: 2px solid #00f3ff;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: fixed;
     left: 0;
     top: 0;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 .menu-container h1 {
     color: #00f3ff;
@@ -33,7 +34,7 @@ body {
     width: 100%;
 }
 .menu li {
-    margin: 15px 0;
+    margin: 10px 0;
 }
 .menu a {
     display: block;
@@ -46,30 +47,30 @@ body {
     transition: background 0.3s, transform 0.2s;
     text-align: center;
     width: 100%;
+    box-sizing: border-box;
 }
 .menu a:hover {
     background: #f4f4f4;
     color: #000;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 .content-container {
-    margin-left: 270px;
-    width: calc(100% - 270px);
+    margin-left: 300px;
+    flex-grow: 1;
     padding: 20px;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+    box-sizing: border-box;
 }
 .iframe-container {
     width: 100%;
-    height: 90vh;
+    height: 95vh;
     border: 2px solid #00f3ff;
     border-radius: 5px;
     overflow: hidden;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    box-sizing: border-box;
 }
 iframe {
     width: 100%;

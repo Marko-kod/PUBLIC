@@ -3,38 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Toolbox</title>
-<link rel="stylesheet" href="css/style.css">
-<script>
-    function loadTool(url) {
-        const iframe = document.getElementById('toolFrame');
-        iframe.src = url;
-
-        // Ensure iframe resizes continuously as content loads or changes
-        iframe.onload = function() {
-            function resizeIframe() {
-                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                iframe.style.height = iframeDocument.documentElement.scrollHeight + "px";
-            }
-
-            // Resize initially and monitor further changes
-            resizeIframe();
-            setInterval(resizeIframe, 500); // Check height every 500ms for dynamic changes
-        };
-    }
-</script>
-
+    <title>IT Developer Toolbox</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        function loadTool(url) {
+            document.getElementById('toolFrame').src = url;
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 IT Developer Toolbox 🌌</h1>
-        <p>Select a tool below and dive into the world of coding madness!</p>
+    <div class="menu-container">
+        <h1>🚀 IT Developer Toolbox</h1>
         <ul class="menu">
             <li><a href="#" onclick="loadTool('tools/odoo_module_generator.html')">Odoo Module Generator</a></li>
-            <li><a href="#" onclick="loadTool('coming_soon.html')">Coming Soon...</a></li>
+            <li><a href="#" onclick="loadTool('tools/XML_changer.html')">XML Changer</a></li>
+            <li><a href="#" onclick="loadTool('tools/converter_JSON2XML.html')">JSON Formatter</a></li>
+            <li><a href="#" onclick="loadTool('tools/App_log_view.html')">APP log Viewer</a></li>
+            <li><a href="#" onclick="loadTool('tools/Work_log.html')">WORK Log</a></li>
+            <li><a href="#" onclick="loadTool('tools/base64_encoder.html')">Base64 Encoder</a></li>
+            <li><a href="#" onclick="loadTool('tools/base64_decoder.html')">Base64 Decoder</a></li>
+           
+            <li><a href="#" onclick="loadTool('tools/password_generator.html')">Password Generator</a></li>
+            <li><a href="#" onclick="loadTool('tools/url_encoder.html')">URL Encoder</a></li>
+            <li><a href="#" onclick="loadTool('tools/url_decoder.html')">URL Decoder</a></li>
+            <li><a href="#" onclick="loadTool('tools/coming_soon.html')">Coming Soon...</a></li>
         </ul>
+    </div>
+    <div class="content-container">
         <div class="iframe-container">
-            <iframe id="toolFrame" src="" ></iframe>
+            <iframe id="toolFrame" src=""></iframe>
         </div>
     </div>
 </body>
