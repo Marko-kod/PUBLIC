@@ -14,6 +14,12 @@
             section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
         }
     </script>
+    <script>
+        if (sessionStorage.getItem("authenticated") !== "true") {
+            window.location.href = "tools/password.html"; // Redirect to login page if not authenticated
+        }
+    </script>
+    
 </head>
 <body>
     <div class="menu-container">
