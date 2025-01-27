@@ -19,6 +19,36 @@
             window.location.href = "log.html"; // Redirect to login page if not authenticated
         }
     </script>
+<script>
+    function loadTool(url) {
+        document.getElementById('toolFrame').src = url;
+
+        // Close all submenus when a submenu item is clicked
+        document.querySelectorAll('.submenu').forEach(section => {
+            section.style.display = "none";
+        });
+    }
+
+    function toggleSection(sectionId) {
+        // Get all submenu elements
+        let allSections = document.querySelectorAll('.submenu');
+
+        // Get the clicked section
+        let section = document.getElementById(sectionId);
+
+        // Close all other submenus
+        allSections.forEach(sec => {
+            if (sec !== section) {
+                sec.style.display = "none";
+            }
+        });
+
+        // Toggle the clicked section
+        section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+    }
+</script>
+
+    
     
 </head>
 <body>
@@ -26,38 +56,39 @@
         <h1>🚀 IT Developer Toolbox</h1>
         <ul class="menu">
             <li><a href="#" onclick="toggleSection('odooSection')">🔧 ODOO</a></li>
-            <ul id="odooSection" style="display: none;">
+            <ul id="odooSection" class="submenu" style="display: none;">
                 <li><a href="#" onclick="loadTool('tools/odoo_module_generator.html')">Odoo Module Generator</a></li>
             </ul>
-
+    
             <li><a href="#" onclick="toggleSection('xmlSection')">📄 XML</a></li>
-            <ul id="xmlSection" style="display: none;">
+            <ul id="xmlSection" class="submenu" style="display: none;">
                 <li><a href="#" onclick="loadTool('tools/XML_changer.html')">XML Changer</a></li>
                 <li><a href="#" onclick="loadTool('tools/converter_JSON2XML.html')">JSON Formatter</a></li>
             </ul>
-
+    
             <li><a href="#" onclick="toggleSection('logSection')">📜 Logs</a></li>
-            <ul id="logSection" style="display: none;">
+            <ul id="logSection" class="submenu" style="display: none;">
                 <li><a href="#" onclick="loadTool('tools/App_log_view.html')">APP Log Viewer</a></li>
                 <li><a href="#" onclick="loadTool('tools/Work_log.html')">WORK Log</a></li>
             </ul>
-
+    
             <li><a href="#" onclick="toggleSection('encoderSection')">🔑 Encoding</a></li>
-            <ul id="encoderSection" style="display: none;">
+            <ul id="encoderSection" class="submenu" style="display: none;">
                 <li><a href="#" onclick="loadTool('tools/base64_encoder.html')">Base64 Encoder</a></li>
                 <li><a href="#" onclick="loadTool('tools/base64_decoder.html')">Base64 Decoder</a></li>
                 <li><a href="#" onclick="loadTool('tools/url_encoder.html')">URL Encoder</a></li>
                 <li><a href="#" onclick="loadTool('tools/url_decoder.html')">URL Decoder</a></li>
             </ul>
-
+    
             <li><a href="#" onclick="toggleSection('utilitySection')">🛠 Utilities</a></li>
-            <ul id="utilitySection" style="display: none;">
+            <ul id="utilitySection" class="submenu" style="display: none;">
                 <li><a href="#" onclick="loadTool('tools/password_generator.html')">Password Generator</a></li>
             </ul>
-
+    
             <li><a href="#" onclick="loadTool('tools/coming_soon.html')">🚀 Coming Soon...</a></li>
         </ul>
     </div>
+    
 
     <div class="content-container">
         <div class="iframe-container">
